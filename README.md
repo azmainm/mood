@@ -5,22 +5,22 @@ The Mood Tracker App is a full-stack web application that allows users to track 
 
 **Features**
 
-User authentication and authorization
-
-Mood tracking with emoji-based input
-
-Visualization of mood data using line charts
-
-Statistics and insights about mood patterns
-
-Responsive design for mobile and desktop devices
+  1. User authentication and authorization
+  
+  2. Mood tracking with emoji-based input
+  
+  3. Visualization of mood data using line charts
+  
+  4. Statistics and insights about mood patterns
+  
+  5. Responsive design for mobile and desktop devices
 
 
 
 **Technologies Used**
 
-Frontend: Next.js, React, Tailwind CSS
+  > Frontend: Next.js, React, Tailwind CSS
 
-Backend: Django, REST API
+  > Backend: Django, REST API
 
-Database: SQLite
+  > Database: SQLite
