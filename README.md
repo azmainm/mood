@@ -1,4 +1,5 @@
 **Mood Tracker App**
+
 The Mood Tracker App is a full-stack web application that allows users to track their mood over time. The frontend is built using Next.js, React, and Tailwind CSS, while the backend is built using Django and a REST API. The application uses SQLite as the database.
 
 **Features**
