@@ -2,22 +2,48 @@
 import React, { useState } from 'react';
 import Modal from './Modal';
 
-const LoginModal = ({ isOpen, onClose, onSwitchToSignUp }) => {
+const LoginModal = ({ isOpen, onClose, onSwitchToSignUp, onLoginSuccess }) => {
   const [formData, setFormData] = useState({ username: '', password: '' });
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Login Data:', formData);
-    // Handle login logic here
-  };
+  
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    const response = await fetch("http://127.0.0.1:8000/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        username: formData.username,
+        password: formData.password,
+      }),
+    });
+  
+    if (response.ok) {
+      const result = await response.json();
+      console.log("User logged in:", result);
+      localStorage.setItem('token', result.access_token);  // Store the JWT token
+      localStorage.setItem('username', result.username);   // Store the username
+      onClose();  // Close the modal on success
+      // Trigger login success, pass username
+      onLoginSuccess(result.username);  
+    } else {
+      setErrorMessage("Login failed. Please check your credentials.");
+      console.error("Login failed");
+    }
+  };
+  
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <h2 className="text-2xl font-semibold mb-4 text-center">Login</h2>
+      {errorMessage && <p className="text-red-500 text-center">{errorMessage}</p>}
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="text"

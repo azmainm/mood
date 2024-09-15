@@ -1,18 +1,40 @@
-// components/SignUpModal.js
 import React, { useState } from 'react';
 import Modal from './Modal';
 
-const SignUpModal = ({ isOpen, onClose, onSwitchToLogin }) => {
+const SignUpModal = ({ isOpen, onClose, onSwitchToLogin, onSignUpSuccess }) => {
   const [formData, setFormData] = useState({ name: '', email: '', username: '', password: '' });
+  const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    setError(''); // Reset error when user starts typing
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Sign Up Data:', formData);
-    // Handle sign up logic here
+    try {
+      const response = await fetch("http://127.0.0.1:8000/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log("User signed up:", result);
+        setSuccessMessage('Sign up successful!');  // Display success message
+        setFormData({ name: '', email: '', username: '', password: '' }); // Reset form
+        setTimeout(() => onSignUpSuccess(), 2000); // Switch to login modal after delay
+      } else {
+        const error = await response.json();
+        setError(error.detail || "Signup failed! Please try again.");
+      }
+    } catch (err) {
+      setError("An error occurred. Please try again later.");
+    }
   };
 
   return (
@@ -26,6 +48,7 @@ const SignUpModal = ({ isOpen, onClose, onSwitchToLogin }) => {
           value={formData.name}
           onChange={handleChange}
           className="w-full px-4 py-2 border rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          required
         />
         <input
           type="email"
@@ -34,6 +57,7 @@ const SignUpModal = ({ isOpen, onClose, onSwitchToLogin }) => {
           value={formData.email}
           onChange={handleChange}
           className="w-full px-4 py-2 border rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          required
         />
         <input
           type="text"
@@ -42,6 +66,7 @@ const SignUpModal = ({ isOpen, onClose, onSwitchToLogin }) => {
           value={formData.username}
           onChange={handleChange}
           className="w-full px-4 py-2 border rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          required
         />
         <input
           type="password"
@@ -50,17 +75,25 @@ const SignUpModal = ({ isOpen, onClose, onSwitchToLogin }) => {
           value={formData.password}
           onChange={handleChange}
           className="w-full px-4 py-2 border rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          required
         />
-        <button type="submit" className="w-full bg-blue-900 text-white py-2 rounded-sm hover:bg-blue-700">
+        <button
+          type="submit"
+          className="w-full bg-blue-900 text-white py-2 rounded-sm hover:bg-blue-700"
+        >
           Sign Up
         </button>
       </form>
+      
+      {/* Error message */}
+      {error && <p className="mt-4 text-center text-red-600">{error}</p>}
+
+      {/* Success message */}
+      {successMessage && <p className="mt-4 text-center text-green-600">{successMessage}</p>}
+
       <p className="mt-4 text-center">
         Already a member?{' '}
-        <button
-          onClick={onSwitchToLogin}
-          className="text-blue-900 hover:underline"
-        >
+        <button onClick={onSwitchToLogin} className="text-blue-900 hover:underline">
           Login
         </button>
       </p>

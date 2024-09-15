@@ -12,7 +12,7 @@ const LineChart = ({ data }) => {
       {
         label: 'Mood Over Time',
         data: data.map(entry => entry.moodValue),
-        borderColor: 'rgba(148, 219, 255, 0.8)',
+        borderColor: 'lightgray',
         fill: false,
         tension: 0.1,
       },
@@ -20,7 +20,7 @@ const LineChart = ({ data }) => {
   };
 
   return (
-    <div className="w-full md:w-3/5 mb-3">
+    <div className="w-full md:w-4/5 mb-3">
       <Line data={chartData} />
     </div>
   );

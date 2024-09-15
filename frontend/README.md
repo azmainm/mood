@@ -1,36 +1,23 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Mood Tracker App
 
-## Getting Started
+The Mood Tracker App is a full-stack web application that allows users to track their mood over time. The frontend is built using Next.js, React, and Tailwind CSS, while the backend is built using Django and a REST API. The application uses SQLite as the database.
 
-First, run the development server:
+Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+> User authentication and authorization
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+> Mood tracking with emoji-based input
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+> Visualization of mood data using line charts
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+> Statistics and insights about mood patterns
 
-## Learn More
+> Responsive design for mobile and desktop devices
 
-To learn more about Next.js, take a look at the following resources:
+Technologies Used
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+> Frontend: Next.js, React, Tailwind CSS
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+> Backend: Django, REST API
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+> Database: SQLite
