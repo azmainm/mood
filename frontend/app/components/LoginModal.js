@@ -10,36 +10,48 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignUp, onLoginSuccess }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    const response = await fetch("http://127.0.0.1:8000/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: new URLSearchParams({
-        username: formData.username,
-        password: formData.password,
-      }),
-    });
-  
-    if (response.ok) {
-      const result = await response.json();
-      console.log("User logged in:", result);
-      localStorage.setItem('token', result.access_token);  // Store the JWT token
-      localStorage.setItem('username', result.username);   // Store the username
-      onClose();  // Close the modal on success
-      // Trigger login success, pass username
-      onLoginSuccess(result.username);  
-    } else {
-      setErrorMessage("Login failed. Please check your credentials.");
-      console.error("Login failed");
+    
+    // Basic validation to prevent empty fields
+    if (!formData.username || !formData.password) {
+      setErrorMessage("Please fill in both fields.");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://127.0.0.1:8000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          username: formData.username,
+          password: formData.password,
+        }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log("User logged in:", result);
+        localStorage.setItem('token', result.access_token);  // Store JWT token
+        localStorage.setItem('username', result.username);   // Store username
+        // If userID is returned, store it as well
+        if (result.userID) {
+          localStorage.setItem('userID', result.userID);
+        }
+
+        onClose();  // Close modal
+        onLoginSuccess(result.username);  // Pass username to parent on success
+      } else {
+        setErrorMessage("Login failed. Please check your credentials.");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      setErrorMessage("An error occurred. Please try again.");
     }
   };
-  
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <h2 className="text-2xl font-semibold mb-4 text-center">Login</h2>

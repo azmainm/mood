@@ -1,11 +1,12 @@
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from . import models, schemas, crud, auth
-from .models import Base
+from .models import Base, User, MoodEntry
 from .database import engine, get_db
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.middleware.cors import CORSMiddleware
 from .auth import get_current_user
+from datetime import datetime, timedelta
 
 app = FastAPI()
 
@@ -42,7 +43,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
         "access_token": access_token,
         "token_type": "bearer",
         "username": user.username,
-        "userID": user.id  # Add this to send back the username
+        "userID": user.id  
     }
 
 @app.post("/mood", response_model=schemas.MoodEntryResponse)
@@ -53,5 +54,42 @@ def submit_mood(
 ):
     return crud.create_mood_entry(db=db, mood=mood, user_id=current_user.id)
 
+@app.get("/stats")
+def get_user_stats(current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
+    user_id = current_user.id
 
-Base.metadata.create_all(bind=engine)
+    # Fetch all mood entries for the logged-in user
+    moods = db.query(MoodEntry).filter(MoodEntry.user_id == user_id).all()
+
+    if not moods:
+        raise HTTPException(status_code=404, detail="No mood data available for this user.")
+
+    # Get the last logged mood
+    last_mood_entry = moods[-1]
+    last_mood = last_mood_entry.emoji
+    last_date = last_mood_entry.timestamp.strftime("%Y-%m-%d %I:%M %p")
+
+    # Get today's date and filter mood entries for today
+    today_start = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+    moods_today = db.query(MoodEntry).filter(
+        MoodEntry.user_id == user_id,
+        MoodEntry.timestamp >= today_start
+    ).all()
+
+    moods_today_count = {"happy": 0, "neutral": 0, "sad": 0, "angry": 0}
+    all_time_count = {"happy": 0, "neutral": 0, "sad": 0, "angry": 0}
+
+    # Count today's moods
+    for mood_entry in moods_today:
+        moods_today_count[mood_entry.emoji] += 1
+
+    # Count all-time moods
+    for mood_entry in moods:
+        all_time_count[mood_entry.emoji] += 1
+
+    return {
+        "last_mood": last_mood,
+        "last_date": last_date,
+        "today": moods_today_count,
+        "all_time": all_time_count,
+    }

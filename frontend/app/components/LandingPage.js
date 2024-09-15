@@ -87,7 +87,7 @@ const LandingPage = () => {
       {/* Display user name if logged in */}
       <div className="flex flex-col items-center shadow-md border rounded-md p-8 mb-12">
         <h2 className="text-xl mb-4 text-gray-800 font-poppins font-semibold">
-          Hello {isLoggedIn ? userName : 'Guest'}, how are you feeling?
+          Hi <span className='text-blue-500'>{isLoggedIn ? userName : 'Guest'}</span>, how are you feeling?
         </h2>
         <EmojiPicker onSelect={handleEmojiSelect} />
       </div>
