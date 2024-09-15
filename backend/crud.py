@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
-from .models import User
+from .models import User, MoodEntry
 from .utils import hash_password, verify_password
-from .schemas import UserCreate
+from .schemas import UserCreate, MoodEntryCreate
 
 def create_user(db: Session, user: UserCreate):
     hashed_password = hash_password(user.password)
@@ -21,3 +21,10 @@ def authenticate_user(db: Session, username: str, password: str):
     if user and verify_password(password, user.hashed_password):
         return user
     return None
+
+def create_mood_entry(db: Session, mood: MoodEntryCreate, user_id: int):
+    db_mood = MoodEntry(emoji=mood.emoji, user_id=user_id)
+    db.add(db_mood)
+    db.commit()
+    db.refresh(db_mood)
+    return db_mood

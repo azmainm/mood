@@ -1,9 +1,11 @@
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from . import models, schemas, crud, auth
+from .models import Base
 from .database import engine, get_db
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.middleware.cors import CORSMiddleware
+from .auth import get_current_user
 
 app = FastAPI()
 
@@ -39,5 +41,17 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
     return {
         "access_token": access_token,
         "token_type": "bearer",
-        "username": user.username  # Add this to send back the username
+        "username": user.username,
+        "userID": user.id  # Add this to send back the username
     }
+
+@app.post("/mood", response_model=schemas.MoodEntryResponse)
+def submit_mood(
+    mood: schemas.MoodEntryCreate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(auth.get_current_user)
+):
+    return crud.create_mood_entry(db=db, mood=mood, user_id=current_user.id)
+
+
+Base.metadata.create_all(bind=engine)

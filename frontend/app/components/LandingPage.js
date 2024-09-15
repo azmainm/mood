@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState, useEffect } from 'react';
 import { FaSignOutAlt } from 'react-icons/fa';
 import EmojiPicker from './EmojiPicker';
@@ -76,8 +75,8 @@ const LandingPage = () => {
   // Handle emoji selection from EmojiPicker
   const handleEmojiSelect = (emoji) => {
     console.log(`Selected emoji: ${emoji}`);
-    // Add the logic to update mood here
-  };
+    // This will also save the emoji to the database via EmojiPicker component
+  };  
 
   return (
     <div className="min-h-screen bg-gray-50 px-6 pt-20 flex flex-col items-center">
