@@ -1,4 +1,3 @@
-// components/StatsCard.js
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -6,8 +5,8 @@ const StatsCard = () => {
   const [stats, setStats] = useState({
     lastMood: '',
     lastDate: '',
-    today: { happy: 0, neutral: 0, sad: 0, angry: 0 },
-    allTime: { happy: 0, neutral: 0, sad: 0, angry: 0 }
+    today: { "😀": 0, "😐": 0, "😢": 0, "😡": 0 },
+    allTime: { "😀": 0, "😐": 0, "😢": 0, "😡": 0 }
   });
 
   const [loading, setLoading] = useState(true);
@@ -16,26 +15,24 @@ const StatsCard = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        // Retrieve token from localStorage
         const token = localStorage.getItem('token');
         if (!token) {
           setError('User token is missing.');
           return;
         }
 
-        // Fetch user stats from the backend
         const response = await axios.get('http://localhost:8000/stats', {
           headers: { Authorization: `Bearer ${token}` }
         });
 
-        // Update state with received data
         const { last_mood, last_date, today, all_time } = response.data;
         setStats({
           lastMood: last_mood,
           lastDate: last_date,
           today,
-          allTime
+          allTime: all_time
         });
+        console.log(JSON.stringify(response));
         setLoading(false);
       } catch (error) {
         console.error('Error fetching stats:', error);
@@ -66,12 +63,12 @@ const StatsCard = () => {
 
       {/* Moods Today */}
       <div className="mb-4">
-        <strong className="text-gray-800 font-semibold">Moods Today:</strong> 😀 {stats.today.happy}, 😐 {stats.today.neutral}, 😢 {stats.today.sad}, 😡 {stats.today.angry}
+        <strong className="text-gray-800 font-semibold">Moods Today:</strong> 😀 {stats.today["😀"]}, 😐 {stats.today["😐"]}, 😢 {stats.today["😢"]}, 😡 {stats.today["😡"]}
       </div>
 
       {/* All-Time Moods */}
       <div className="mb-2">
-        <strong className="text-gray-800 font-semibold">All-Time Moods:</strong> 😀 {stats.allTime.happy}, 😐 {stats.allTime.neutral}, 😢 {stats.allTime.sad}, 😡 {stats.allTime.angry}
+        <strong className="text-gray-800 font-semibold">All-Time Moods:</strong> 😀 {stats.allTime["😀"]}, 😐 {stats.allTime["😐"]}, 😢 {stats.allTime["😢"]}, 😡 {stats.allTime["😡"]}
       </div>
     </div>
   );

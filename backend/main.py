@@ -56,7 +56,7 @@ def submit_mood(
 
 @app.get("/stats")
 def get_user_stats(current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
-    user_id = current_user.id
+    user_id = current_user.id  # Ensure this is correctly fetching the logged-in user's ID
 
     # Fetch all mood entries for the logged-in user
     moods = db.query(MoodEntry).filter(MoodEntry.user_id == user_id).all()
@@ -76,8 +76,8 @@ def get_user_stats(current_user: models.User = Depends(auth.get_current_user), d
         MoodEntry.timestamp >= today_start
     ).all()
 
-    moods_today_count = {"happy": 0, "neutral": 0, "sad": 0, "angry": 0}
-    all_time_count = {"happy": 0, "neutral": 0, "sad": 0, "angry": 0}
+    moods_today_count = {"😀": 0, "😐": 0, "😢": 0, "😡": 0}  # Unicode emoji keys
+    all_time_count = {"😀": 0, "😐": 0, "😢": 0, "😡": 0}
 
     # Count today's moods
     for mood_entry in moods_today:

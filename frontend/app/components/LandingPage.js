@@ -6,13 +6,21 @@ import LineChart from './LineChart';
 import StatsCard from './StatsCard';
 import SignUpModal from './SignUpModal';
 import LoginModal from './LoginModal';
+import axios from 'axios';
 
 const LandingPage = () => {
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(true); // Login modal opens by default
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState(''); // Store user's name
-
+  const [moodData, setMoodData] = useState([]); // Real mood data
+  const [stats, setStats] = useState({
+    lastMood: '',
+    lastDate: '',
+    today: { "😀": 0, "😐": 0, "😢": 0, "😡": 0 },
+    allTime: { "😀": 0, "😐": 0, "😢": 0, "😡": 0 }
+  });
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
@@ -21,9 +29,30 @@ const LandingPage = () => {
     if (storedToken && storedUsername) {
       setIsLoggedIn(true);
       setUserName(storedUsername);  // Retrieve username from localStorage
+
+      // // Fetch mood data and stats
+      // fetchData(storedToken);
     }
   }, []);
-  
+
+  // Function to fetch mood data and stats from the backend
+  // const fetchData = async (token) => {
+  //   try {
+  //     const response = await axios.get('http://localhost:8000/stats', {
+  //       headers: { Authorization: `Bearer ${token}` },
+  //     });
+
+  //     // // Assume response.data has a mood history array and stats
+  //     // const { moodHistory, lastMood, lastDate, today, allTime } = response.data;
+
+  //     // // Update state with the real data
+  //     // setMoodData(moodHistory); // Array for LineChart
+  //     setStats({ lastMood, lastDate, today, allTime }); // Stats for StatsCard
+  //   } catch (error) {
+  //     console.error('Error fetching data:', error);
+  //     setError('Failed to load data.');
+  //   }
+  // };
 
   // Function to open the Sign-Up modal and close Login modal
   const openSignUp = () => {
@@ -42,11 +71,9 @@ const LandingPage = () => {
     setUserName(username);  // Store the logged-in username
     setIsLoginOpen(false);  // Close the login modal after successful login
   };
-  
 
   // Function to handle successful sign-up
   const handleSignUpSuccess = () => {
-    // After sign-up, open the login modal automatically
     setIsSignUpOpen(false);
     setIsLoginOpen(true); // Ensure login modal opens after sign-up
   };
@@ -54,29 +81,18 @@ const LandingPage = () => {
   // Function to handle logout
   const handleLogout = () => {
     setIsLoggedIn(false);  // Log out user
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
     setTimeout(() => {
       setIsLoginOpen(true);  // Reopen login modal after a slight delay
     }, 300);  // A brief delay to prevent the button from vanishing abruptly
   };
 
-  // Dummy data for chart and stats
-  const [moodData, setMoodData] = useState([
-    { date: '2024-09-01', moodValue: 3 },
-    { date: '2024-09-02', moodValue: 2 }
-  ]);
-
-  const [stats, setStats] = useState({
-    lastMood: '😀',
-    lastDate: '2024-09-02 10:00 AM',
-    today: { happy: 3, neutral: 1, sad: 0, angry: 0 },
-    allTime: { happy: 50, neutral: 20, sad: 10, angry: 5 },
-  });
-
   // Handle emoji selection from EmojiPicker
   const handleEmojiSelect = (emoji) => {
     console.log(`Selected emoji: ${emoji}`);
     // This will also save the emoji to the database via EmojiPicker component
-  };  
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 px-6 pt-20 flex flex-col items-center">
@@ -98,7 +114,7 @@ const LandingPage = () => {
 
       <div className="flex flex-col md:flex-row justify-between items-center w-full max-w-4xl mt-6">
         <LineChart data={moodData} />
-        <StatsCard stats={stats} />
+        <StatsCard key={userName} />
       </div>
 
       {/* Render sign-out button if logged in */}
