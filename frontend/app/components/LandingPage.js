@@ -95,7 +95,7 @@ const LandingPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 px-6 pt-20 flex flex-col items-center">
+    <div className="min-h-screen bg-gray-50 px-6 pt-10 flex flex-col items-center">
       <h1 className="text-4xl font-black mb-8 text-gray-700">
         M0<span className="line-through text-blue-400">O</span>0D
       </h1>
