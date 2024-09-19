@@ -12,7 +12,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Or ["*"] to allow all origins
+    allow_origins=["https://moodtracker-pd9afczd4-azmain-morsheds-projects.vercel.app"],  # Or ["*"] to allow all origins
     allow_credentials=True,
     allow_methods=["*"],  # Allow all methods (POST, GET, etc.)
     allow_headers=["*"],  # Allow all headers
