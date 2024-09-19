@@ -8,52 +8,51 @@ import SignUpModal from './SignUpModal';
 import LoginModal from './LoginModal';
 import axios from 'axios';
 
+const emojiToMoodValue = {
+  "😀": 3,  // Happy
+  "😐": 1,  // Neutral
+  "😢": -1, // Sad
+  "😡": -2, // Angry
+};
+
 const LandingPage = () => {
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(true); // Login modal opens by default
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState(''); // Store user's name
-  const [moodData, setMoodData] = useState([]); // Real mood data
-  const [stats, setStats] = useState({
-    lastMood: '',
-    lastDate: '',
-    today: { "😀": 0, "😐": 0, "😢": 0, "😡": 0 },
-    allTime: { "😀": 0, "😐": 0, "😢": 0, "😡": 0 }
-  });
-  const [error, setError] = useState(null);
+  const [moodDataChart, setMoodDataChart] = useState([]);
+  // const [isLoading, setIsLoading] = useState(false); // Manage loading state
+  // const [stats, setStats] = useState(null);  
+  // const [error, setError] = useState(null); 
+  // const [moodData, setMoodData] = useState(null);  
 
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
     const storedUsername = localStorage.getItem('username');
-  
+    const userID = localStorage.getItem('userID');
+
+
     if (storedToken && storedUsername) {
       setIsLoggedIn(true);
       setUserName(storedUsername);  // Retrieve username from localStorage
-
-      // // Fetch mood data and stats
-      // fetchData(storedToken);
+      // Fetch mood data for the last 7 days
+      axios.get('http://localhost:8000/moods/last7days', {
+        headers: { Authorization: `Bearer ${storedToken}` }
+      })
+      .then((response) => {
+        const moodEntries = response.data.map(entry => ({
+          date: entry.date,
+          moodValue: emojiToMoodValue[entry.emoji]
+        }));
+        setMoodDataChart(moodEntries);  // Update state with mood data
+      })
+      .catch((error) => {
+        console.error("Error fetching mood data", error);
+        setError("Could not load mood data.");
+      });
     }
   }, []);
-
-  // Function to fetch mood data and stats from the backend
-  // const fetchData = async (token) => {
-  //   try {
-  //     const response = await axios.get('http://localhost:8000/stats', {
-  //       headers: { Authorization: `Bearer ${token}` },
-  //     });
-
-  //     // // Assume response.data has a mood history array and stats
-  //     // const { moodHistory, lastMood, lastDate, today, allTime } = response.data;
-
-  //     // // Update state with the real data
-  //     // setMoodData(moodHistory); // Array for LineChart
-  //     setStats({ lastMood, lastDate, today, allTime }); // Stats for StatsCard
-  //   } catch (error) {
-  //     console.error('Error fetching data:', error);
-  //     setError('Failed to load data.');
-  //   }
-  // };
-
+  
   // Function to open the Sign-Up modal and close Login modal
   const openSignUp = () => {
     setIsSignUpOpen(true);
@@ -88,11 +87,68 @@ const LandingPage = () => {
     }, 300);  // A brief delay to prevent the button from vanishing abruptly
   };
 
+  
   // Handle emoji selection from EmojiPicker
   const handleEmojiSelect = (emoji) => {
     console.log(`Selected emoji: ${emoji}`);
     // This will also save the emoji to the database via EmojiPicker component
   };
+
+// Function to fetch updated stats
+// const fetchUpdatedStats = async () => {
+//   try {
+//     const token = localStorage.getItem('token'); // Assuming token is stored in localStorage
+//     const response = await axios.get('http://localhost:8000/stats', {
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//       },
+//     });
+//     setStats(response.data); // Update stats state with new data
+//   } catch (error) {
+//     console.error("Error fetching stats:", error);
+//     setError("Error fetching updated stats.");
+//   }
+// };
+
+// // Function to fetch updated mood data for the chart
+// const fetchUpdatedMoodData = async () => {
+//   try {
+//     const token = localStorage.getItem('token');
+//     const response = await axios.get('http://localhost:8000/moods', {
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//       },
+//     });
+//     setMoodData(response.data); // Update mood data state with new data
+//   } catch (error) {
+//     console.error("Error fetching mood data:", error);
+//     setError("Error fetching updated mood data.");
+//   }
+// };
+
+// // // Handle emoji selection and save mood
+// // const [isLoading, setIsLoading] = useState(false); // Manage loading state
+
+// // Modify handleEmojiSelect function to use loading state
+// const handleEmojiSelect = async (emoji) => {
+//   setIsLoading(true); // Show loading
+
+//   try {
+//     const token = localStorage.getItem('token');
+//     await axios.post('http://localhost:8000/mood', { emoji: emoji }, {
+//       headers: { Authorization: `Bearer ${token}` },
+//     });
+
+//     await fetchUpdatedStats();  // Fetch latest stats
+//     await fetchUpdatedMoodData();  // Fetch latest chart data
+//   } catch (error) {
+//     console.error("Error saving mood:", error);
+//     setError("Error saving mood.");
+//   } finally {
+//     setIsLoading(false);  // Hide loading once done
+//   }
+// };
+
 
   return (
     <div className="min-h-screen bg-gray-50 px-6 pt-10 flex flex-col items-center">
@@ -113,7 +169,7 @@ const LandingPage = () => {
       </h1>
 
       <div className="flex flex-col md:flex-row justify-between items-center w-full max-w-4xl mt-6">
-        <LineChart data={moodData} />
+        <LineChart data={moodDataChart} />
         <StatsCard key={userName} />
       </div>
 

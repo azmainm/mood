@@ -93,3 +93,22 @@ def get_user_stats(current_user: models.User = Depends(auth.get_current_user), d
         "today": moods_today_count,
         "all_time": all_time_count,
     }
+
+@app.get("/moods/last7days")
+def get_last_7_days_moods(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    from datetime import datetime, timedelta
+
+    # Calculate the date 7 days ago
+    seven_days_ago = datetime.now() - timedelta(days=7)
+
+    # Fetch all mood entries for the logged-in user within the last 7 days
+    moods = db.query(models.MoodEntry).filter(
+        models.MoodEntry.user_id == current_user.id,
+        models.MoodEntry.timestamp >= seven_days_ago
+    ).order_by(models.MoodEntry.timestamp).all()
+
+    return [{
+        "date": mood.timestamp.strftime("%Y-%m-%d"),  # format the date to 'YYYY-MM-DD'
+        "emoji": mood.emoji  # store the emoji
+    } for mood in moods]
+

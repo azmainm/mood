@@ -7,11 +7,11 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 
 const LineChart = ({ data }) => {
   const chartData = {
-    labels: data.map(entry => entry.date),
+    labels: data.map(entry => entry.date),  // x-axis: dates
     datasets: [
       {
-        label: 'Mood Over Time',
-        data: data.map(entry => entry.moodValue),
+        label: 'Mood in the past 7 days',
+        data: data.map(entry => entry.moodValue),  // y-axis: mood values
         borderColor: 'lightgray',
         fill: false,
         tension: 0.1,

@@ -53,6 +53,7 @@ const StatsCard = () => {
   }
 
   return (
+    <div>
     <div className="w-full md:w-3/5 bg-gray-50 shadow-md rounded-md p-4 mt-6">
       <h2 className="text-xl font-semibold mb-4 text-gray-800">Mood Statistics</h2>
 
@@ -71,6 +72,9 @@ const StatsCard = () => {
         <strong className="text-gray-800 font-semibold">All-Time Moods:</strong> 😀 {stats.allTime["😀"]}, 😐 {stats.allTime["😐"]}, 😢 {stats.allTime["😢"]}, 😡 {stats.allTime["😡"]}
       </div>
     </div>
+    <p className=' text-gray-500 font-sans text-xs mt-8 px-2'>Note: If you cannot see the updates, please reload the page and log in again.</p>
+    </div>
+    
   );
 };
 
