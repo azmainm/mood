@@ -14,7 +14,7 @@ const SignUpModal = ({ isOpen, onClose, onSwitchToLogin, onSignUpSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://127.0.0.1:8000/signup", {
+      const response = await fetch("https://d365-103-220-204-28.ngrok.io/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
