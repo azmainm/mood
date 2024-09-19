@@ -1,0 +1,6 @@
+[build]
+# Install system dependencies before Python packages
+commands = [
+  "apt-get update && apt-get install -y libevdev-dev",
+  "pip install -r requirements.txt"
+]
