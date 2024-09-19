@@ -21,7 +21,7 @@ const StatsCard = () => {
           return;
         }
 
-        const response = await axios.get('https://d365-103-220-204-28.ngrok.io/stats', {
+        const response = await axios.get('https://d365-103-220-204-28.ngrok-free.app/stats', {
           headers: { Authorization: `Bearer ${token}` }
         });
 

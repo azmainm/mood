@@ -14,7 +14,7 @@ const SignUpModal = ({ isOpen, onClose, onSwitchToLogin, onSignUpSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("https://d365-103-220-204-28.ngrok.io/signup", {
+      const response = await fetch("https://d365-103-220-204-28.ngrok-free.app/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
