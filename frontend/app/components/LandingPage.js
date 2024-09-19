@@ -6,6 +6,7 @@ import LineChart from './LineChart';
 import StatsCard from './StatsCard';
 import SignUpModal from './SignUpModal';
 import LoginModal from './LoginModal';
+import MoodSavedModal from './MoodSavedModal';
 import axios from 'axios';
 
 const emojiToMoodValue = {
@@ -21,6 +22,9 @@ const LandingPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState(''); // Store user's name
   const [moodDataChart, setMoodDataChart] = useState([]);
+  const [selectedMood, setSelectedMood] = useState(null);
+  const [moodSavedModalOpen, setMoodSavedModalOpen] = useState(false); // Modal state
+  const [moodTimestamp, setMoodTimestamp] = useState(null);
   // const [isLoading, setIsLoading] = useState(false); // Manage loading state
   // const [stats, setStats] = useState(null);  
   // const [error, setError] = useState(null); 
@@ -92,6 +96,10 @@ const LandingPage = () => {
   const handleEmojiSelect = (emoji) => {
     console.log(`Selected emoji: ${emoji}`);
     // This will also save the emoji to the database via EmojiPicker component
+    const timestamp = new Date().toLocaleString(); // Get current timestamp
+    setSelectedMood(emoji);
+    setMoodTimestamp(timestamp);
+    setMoodSavedModalOpen(true); // Open the modal
   };
 
 // Function to fetch updated stats
@@ -168,11 +176,12 @@ const LandingPage = () => {
         Dashb<span className="underline text-blue-400">o</span>ard
       </h1>
 
-      <div className="flex flex-col md:flex-row justify-between items-center w-full max-w-4xl mt-6">
-        <LineChart data={moodDataChart} />
-        <StatsCard key={userName} />
-      </div>
-
+      {/* <div className="flex flex-col md:flex-row justify-between items-center w-full max-w-4xl mt-6">
+        
+        
+      </div> */}
+      <LineChart data={moodDataChart} />
+      <StatsCard key={userName} />
       {/* Render sign-out button if logged in */}
       {isLoggedIn && (
         <FaSignOutAlt
@@ -196,6 +205,14 @@ const LandingPage = () => {
         onClose={() => setIsLoginOpen(false)}
         onSwitchToSignUp={openSignUp}
         onLoginSuccess={handleLoginSuccess} // Handle successful login
+      />
+
+      {/* Mood Saved Modal */}
+      <MoodSavedModal
+        isOpen={moodSavedModalOpen}
+        mood={selectedMood}
+        timestamp={moodTimestamp}
+        onClose={() => setMoodSavedModalOpen(false)}
       />
     </div>
   );

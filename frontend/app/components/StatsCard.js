@@ -54,7 +54,7 @@ const StatsCard = () => {
 
   return (
     <div>
-    <div className="w-full md:w-3/5 bg-gray-50 shadow-md rounded-md p-4 mt-6">
+    <div className="w-full  bg-gray-50 shadow-md rounded-md p-4 mt-6">
       <h2 className="text-xl font-semibold mb-4 text-gray-800">Mood Statistics</h2>
 
       {/* Last Logged Mood */}
