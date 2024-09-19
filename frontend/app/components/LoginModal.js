@@ -54,6 +54,9 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignUp, onLoginSuccess }) => {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
+      {/* <h1 className="text-xl  text-center font-black mb-2 text-gray-700">
+        M0<span className="line-through text-blue-400">O</span>0D
+      </h1> */}
       <h2 className="text-2xl font-semibold mb-4 text-center">Login</h2>
       {errorMessage && <p className="text-red-500 text-center">{errorMessage}</p>}
       <form onSubmit={handleSubmit} className="space-y-4">
