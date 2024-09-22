@@ -31,17 +31,18 @@ const LandingPage = () => {
   // const [moodData, setMoodData] = useState(null);  
 
   useEffect(() => {
-    const storedToken = localStorage.getItem('token');
+    // const storedToken = localStorage.getItem('token');
     const storedUsername = localStorage.getItem('username');
     const userID = localStorage.getItem('userID');
 
 
-    if (storedToken && storedUsername) {
+    // if (storedToken && storedUsername) {
+      if (storedUsername) {
       setIsLoggedIn(true);
       setUserName(storedUsername);  // Retrieve username from localStorage
       // Fetch mood data for the last 7 days
       axios.get(' https://fea5-103-220-204-28.ngrok-free.app/moods/last7days', {
-        headers: { Authorization: `Bearer ${storedToken}` }
+        // headers: { Authorization: `Bearer ${storedToken}` }
       })
       .then((response) => {
         const moodEntries = response.data.map(entry => ({
@@ -84,7 +85,7 @@ const LandingPage = () => {
   // Function to handle logout
   const handleLogout = () => {
     setIsLoggedIn(false);  // Log out user
-    localStorage.removeItem('token');
+    // localStorage.removeItem('token');
     localStorage.removeItem('username');
     setTimeout(() => {
       setIsLoginOpen(true);  // Reopen login modal after a slight delay

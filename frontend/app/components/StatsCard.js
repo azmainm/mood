@@ -15,14 +15,19 @@ const StatsCard = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          setError('User token is missing.');
-          return;
-        }
+        // const token = localStorage.getItem('token');
+        // if (!token) {
+        //   setError('User token is missing.');
+        //   return;
+        // }
+        const username = localStorage.getItem('username');
+        if (!username) {
+        console.error("No username found, user is not authenticated");
+        return;
+      }
 
         const response = await axios.get('https://fea5-103-220-204-28.ngrok-free.app/stats', {
-          headers: { Authorization: `Bearer ${token}` }
+          // headers: { Authorization: `Bearer ${token}` }
         });
 
         const { last_mood, last_date, today, all_time } = response.data;

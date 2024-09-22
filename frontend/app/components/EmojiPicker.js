@@ -5,20 +5,44 @@ import axios from 'axios';
 const EmojiPicker = ({ onSelect }) => {
   const emojis = ['😀', '😐', '😢', '😡'];
 
+  // const handleEmojiSelect = async (emoji) => {
+  //   try {
+  //     const token = localStorage.getItem('token');
+  //     if (!token) {
+  //       console.error("No token found, user is not authenticated");
+  //       return;
+  //     }
+
+  //     const response = await axios.post(
+  //       'https://d9b9-103-220-204-28.ngrok-free.app/mood',
+  //       { emoji },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+  //     console.log("Mood saved:", response.data);
+  //   } catch (error) {
+  //     console.error("Failed to save mood:", error);
+  //   }
+  //   onSelect(emoji);
+  // };
+
   const handleEmojiSelect = async (emoji) => {
     try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        console.error("No token found, user is not authenticated");
+      const username = localStorage.getItem('username');
+      if (!username) {
+        console.error("No username found, user is not authenticated");
         return;
       }
-
+  
       const response = await axios.post(
-        ' https://fea5-103-220-204-28.ngrok-free.app/mood',
+        'https://d9b9-103-220-204-28.ngrok-free.app/mood',
         { emoji },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            username: username  // Send username in the headers
           },
         }
       );
@@ -28,6 +52,7 @@ const EmojiPicker = ({ onSelect }) => {
     }
     onSelect(emoji);
   };
+  
 
   return (
     <div className="flex justify-center space-x-4 mt-2 mb-6">
