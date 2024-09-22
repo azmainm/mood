@@ -14,7 +14,7 @@ const EmojiPicker = ({ onSelect }) => {
       }
 
       const response = await axios.post(
-        'https://d365-103-220-204-28.ngrok.io/mood',
+        ' https://fea5-103-220-204-28.ngrok-free.app/mood',
         { emoji },
         {
           headers: {

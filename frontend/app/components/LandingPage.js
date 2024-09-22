@@ -40,7 +40,7 @@ const LandingPage = () => {
       setIsLoggedIn(true);
       setUserName(storedUsername);  // Retrieve username from localStorage
       // Fetch mood data for the last 7 days
-      axios.get('https://d365-103-220-204-28.ngrok-free.app/moods/last7days', {
+      axios.get(' https://fea5-103-220-204-28.ngrok-free.app/moods/last7days', {
         headers: { Authorization: `Bearer ${storedToken}` }
       })
       .then((response) => {
