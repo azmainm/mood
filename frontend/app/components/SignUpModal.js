@@ -14,7 +14,7 @@ const SignUpModal = ({ isOpen, onClose, onSwitchToLogin, onSignUpSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("https://d9b9-103-220-204-28.ngrok-free.app/signup", {
+      const response = await fetch("https://95a5-103-220-204-29.ngrok-free.app/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
