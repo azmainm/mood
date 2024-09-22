@@ -12,7 +12,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://d365-103-220-204-28.ngrok-free.app","https://moodtracker-fif2fodxf-azmain-morsheds-projects.vercel.app"],  # Or ["*"] to allow all origins
+    allow_origins=["https://mood-gray-gamma.vercel.app/","https://d365-103-220-204-28.ngrok-free.app","https://moodtracker-9jdmvgwp1-azmain-morsheds-projects.vercel.app"],  # Or ["*"] to allow all origins
     allow_credentials=True,
     allow_methods=["*"],  # Allow all methods (POST, GET, etc.)
     allow_headers=["*"],  # Allow all headers
