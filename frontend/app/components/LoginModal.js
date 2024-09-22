@@ -20,7 +20,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignUp, onLoginSuccess }) => {
     }
 
     try {
-      const response = await fetch("https://d365-103-220-204-28.ngrok.io/login", {
+      const response = await fetch("https://d365-103-220-204-28.ngrok-free.app/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
